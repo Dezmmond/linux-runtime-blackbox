@@ -4,7 +4,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/yourname/linux-runtime-blackbox/internal/model"
+	"github.com/Dezmmond/linux-runtime-blackbox/internal/model"
 )
 
 func ReadCgroups(pid int) ([]model.Cgroup, error) {

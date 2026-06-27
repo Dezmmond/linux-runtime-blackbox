@@ -7,9 +7,9 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/yourname/linux-runtime-blackbox/internal/collector"
-	"github.com/yourname/linux-runtime-blackbox/internal/model"
-	"github.com/yourname/linux-runtime-blackbox/internal/report"
+	"github.com/Dezmmond/linux-runtime-blackbox/internal/collector"
+	"github.com/Dezmmond/linux-runtime-blackbox/internal/model"
+	"github.com/Dezmmond/linux-runtime-blackbox/internal/report"
 )
 
 const (

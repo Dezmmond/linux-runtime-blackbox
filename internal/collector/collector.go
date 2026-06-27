@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/yourname/linux-runtime-blackbox/internal/model"
-	"github.com/yourname/linux-runtime-blackbox/internal/procfs"
+	"github.com/Dezmmond/linux-runtime-blackbox/internal/model"
+	"github.com/Dezmmond/linux-runtime-blackbox/internal/procfs"
 )
 
 const SchemaVersion = "0.1"

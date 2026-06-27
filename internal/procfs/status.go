@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/yourname/linux-runtime-blackbox/internal/model"
+	"github.com/Dezmmond/linux-runtime-blackbox/internal/model"
 )
 
 type StatusInfo struct {

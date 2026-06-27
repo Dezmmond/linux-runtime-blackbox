@@ -1,3 +1,3 @@
-module github.com/yourname/linux-runtime-blackbox
+module github.com/Dezmmond/linux-runtime-blackbox
 
-go 1.22
+go 1.26

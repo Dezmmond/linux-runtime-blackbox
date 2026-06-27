@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io"
 
-	"github.com/yourname/linux-runtime-blackbox/internal/model"
+	"github.com/Dezmmond/linux-runtime-blackbox/internal/model"
 )
 
 func WriteJSON(w io.Writer, r model.Report) error {

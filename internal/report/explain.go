@@ -6,7 +6,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/yourname/linux-runtime-blackbox/internal/model"
+	"github.com/Dezmmond/linux-runtime-blackbox/internal/model"
 )
 
 func WritePretty(w io.Writer, r model.Report) error {
