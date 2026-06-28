@@ -1,19 +1,24 @@
+GO=/snap/bin/go
+
 .PHONY: test run inspect build fmt vet
 
 test:
-	go test ./...
+	$(GO) test ./...
 
 fmt:
-	go fmt ./...
+	$(GO) fmt ./...
 
 vet:
-	go vet ./...
+	$(GO) vet ./...
+
+run-command:
+	$(GO) run ./cmd/blackbox run -- sleep 1
 
 build:
-	go build -o bin/blackbox ./cmd/blackbox
+	$(GO) build -o bin/blackbox ./cmd/blackbox
 
 inspect:
-	go run ./cmd/blackbox inspect --pid $$PPID --pretty
+	$(GO) run ./cmd/blackbox inspect --pid $$PPID --pretty
 
 run:
-	go run ./cmd/blackbox inspect --pid $$ --pretty
+	$(GO) run ./cmd/blackbox inspect --pid $$ --pretty

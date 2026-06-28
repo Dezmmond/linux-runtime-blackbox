@@ -15,6 +15,7 @@ Linux Runtime Blackbox - CLI-first агент диагностики Linux-пр�
 go test ./...
 go run ./cmd/blackbox inspect --pid $$ --pretty
 go run ./cmd/blackbox inspect --pid $$ --output /tmp/blackbox-report.json
+go run ./cmd/blackbox run -- sleep 1
 ```
 
 По умолчанию `inspect` печатает JSON в stdout:
@@ -41,6 +42,13 @@ go run ./cmd/blackbox inspect --pid $$ --output /tmp/blackbox-report.json
 go run ./cmd/blackbox explain /tmp/blackbox-report.json
 ```
 
+Запустить команду под наблюдением:
+
+```bash
+go run ./cmd/blackbox run -- python3 scripts/workload_open_files.py
+go run ./cmd/blackbox run --output /tmp/blackbox-run.json -- sleep 1
+```
+
 ## Что собирает v0.1
 
 - `/proc/<pid>/comm`, `cmdline`, `exe`, `cwd`
@@ -53,6 +61,7 @@ go run ./cmd/blackbox explain /tmp/blackbox-report.json
 - namespaces из `/proc/<pid>/ns`
 - cgroup membership из `/proc/<pid>/cgroup`
 - простые warnings по эвристикам
+- v0.2 run metadata: команда, PID, время старта/завершения, длительность и exit code
 
 Инструмент не читает environment variables и память процесса. Если часть procfs
 недоступна из-за прав, zombie-состояния или гонки с завершением процесса,
