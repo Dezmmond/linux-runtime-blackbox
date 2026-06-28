@@ -14,6 +14,7 @@ and no eBPF. It is a local procfs-based inspector.
 go test ./...
 go run ./cmd/blackbox inspect --pid $$ --pretty
 go run ./cmd/blackbox inspect --pid $$ --output /tmp/blackbox-report.json
+go run ./cmd/blackbox run -- sleep 1
 ```
 
 Default output is JSON:
@@ -34,6 +35,13 @@ You can render a saved JSON report as text:
 go run ./cmd/blackbox explain /tmp/blackbox-report.json
 ```
 
+Run a command under observation:
+
+```bash
+go run ./cmd/blackbox run -- python3 scripts/workload_open_files.py
+go run ./cmd/blackbox run --output /tmp/blackbox-run.json -- sleep 1
+```
+
 ## What v0.1 Collects
 
 - `/proc/<pid>/comm`, `cmdline`, `exe`, and `cwd`
@@ -45,6 +53,7 @@ go run ./cmd/blackbox explain /tmp/blackbox-report.json
 - namespaces from `/proc/<pid>/ns`
 - cgroup membership from `/proc/<pid>/cgroup`
 - simple operational warnings
+- v0.2 run metadata: command, PID, start/end time, duration, and exit code
 
 The tool handles partial procfs read failures by producing the best report it can
 and adding warnings. It does not read environment variables or process memory.
