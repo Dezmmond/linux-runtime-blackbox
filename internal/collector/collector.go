@@ -11,7 +11,7 @@ import (
 	"github.com/Dezmmond/linux-runtime-blackbox/internal/procfs"
 )
 
-const SchemaVersion = "0.1"
+const SchemaVersion = "0.2"
 
 var ErrProcessNotFound = errors.New("target process not found")
 

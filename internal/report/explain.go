@@ -21,6 +21,23 @@ func WritePretty(w io.Writer, r model.Report) error {
 	if err := write("schema: %s\ncollected_at: %s\n\n", r.SchemaVersion, r.CollectedAt); err != nil {
 		return err
 	}
+	if r.Run != nil {
+		if err := write("Run\n"); err != nil {
+			return err
+		}
+		if err := write("  command: %s\n  pid: %d\n  started_at: %s\n  ended_at: %s\n  duration_ms: %d\n  exit_code: %d\n",
+			strings.Join(r.Run.Command, " "), r.Run.PID, r.Run.StartedAt, dash(r.Run.EndedAt), r.Run.DurationMillis, r.Run.ExitCode); err != nil {
+			return err
+		}
+		if r.Run.Signal != "" {
+			if err := write("  signal: %s\n", r.Run.Signal); err != nil {
+				return err
+			}
+		}
+		if err := write("  initial_snapshot: %s\n  final_snapshot: %s\n\n", yesNo(r.InitialSnapshot != nil), yesNo(r.FinalSnapshot != nil)); err != nil {
+			return err
+		}
+	}
 	if err := write("Target\n"); err != nil {
 		return err
 	}
@@ -108,4 +125,11 @@ func dash(value string) string {
 		return "-"
 	}
 	return value
+}
+
+func yesNo(value bool) string {
+	if value {
+		return "yes"
+	}
+	return "no"
 }
