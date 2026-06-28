@@ -9,6 +9,9 @@ fmt:
 vet:
 	go vet ./...
 
+run-command:
+	go run ./cmd/blackbox run -- sleep 1
+
 build:
 	go build -o bin/blackbox ./cmd/blackbox
 

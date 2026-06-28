@@ -10,6 +10,7 @@ import (
 	"github.com/Dezmmond/linux-runtime-blackbox/internal/collector"
 	"github.com/Dezmmond/linux-runtime-blackbox/internal/model"
 	"github.com/Dezmmond/linux-runtime-blackbox/internal/report"
+	runpkg "github.com/Dezmmond/linux-runtime-blackbox/internal/run"
 )
 
 const (
@@ -32,10 +33,12 @@ func run(args []string) int {
 	switch args[0] {
 	case "inspect":
 		return runInspect(args[1:])
+	case "run":
+		return runCommand(args[1:])
 	case "explain":
 		return runExplain(args[1:])
 	case "version":
-		fmt.Println("blackbox 0.1")
+		fmt.Println("blackbox 0.2")
 		return 0
 	case "-h", "--help", "help":
 		usage(os.Stdout)
@@ -45,6 +48,42 @@ func run(args []string) int {
 		usage(os.Stderr)
 		return exitUsage
 	}
+}
+
+func runCommand(args []string) int {
+	fs := flag.NewFlagSet("run", flag.ContinueOnError)
+	fs.SetOutput(os.Stderr)
+	output := fs.String("output", "", "write JSON report to path")
+	if err := fs.Parse(args); err != nil {
+		return exitUsage
+	}
+	command := fs.Args()
+	if len(command) > 0 && command[0] == "--" {
+		command = command[1:]
+	}
+	if len(command) == 0 {
+		fmt.Fprintln(os.Stderr, "run requires -- <command> [args...]")
+		return exitUsage
+	}
+
+	r, err := runpkg.Command(command)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "run failed: %v\n", err)
+		return exitGeneric
+	}
+
+	if *output != "" {
+		if err := writeJSONFile(*output, r); err != nil {
+			fmt.Fprintf(os.Stderr, "write output: %v\n", err)
+			return exitGeneric
+		}
+	}
+
+	if err := report.WritePretty(os.Stdout, r); err != nil {
+		fmt.Fprintf(os.Stderr, "write pretty report: %v\n", err)
+		return exitGeneric
+	}
+	return 0
 }
 
 func runInspect(args []string) int {
@@ -143,11 +182,13 @@ func handleCollectError(err error) int {
 func usage(out *os.File) {
 	fmt.Fprintf(out, `Usage:
   blackbox inspect --pid <pid> [--output report.json] [--pretty]
+  blackbox run [--output report.json] -- <command> [args...]
   blackbox explain report.json
   blackbox version
 
 Examples:
   blackbox inspect --pid %s --pretty
   blackbox inspect --pid %s --output /tmp/blackbox-report.json
+  blackbox run -- sleep 1
 `, strconv.Itoa(os.Getpid()), strconv.Itoa(os.Getpid()))
 }
